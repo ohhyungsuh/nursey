@@ -38,3 +38,5 @@ out/
 
 .env
 .idea
+
+application-jwt.yml
