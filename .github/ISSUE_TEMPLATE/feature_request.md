@@ -1,7 +1,7 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
-title: ''
+about: 기능 추가 이슈
+title: [FEAT]
 labels: feat
 assignees: ''
 
@@ -19,3 +19,4 @@ assignees: ''
 - [ ] TODO
 
 ## 참고할만한 자료(선택)
+> 
