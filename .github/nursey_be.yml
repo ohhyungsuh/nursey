@@ -1,0 +1,101 @@
+name: CI with GitHub Actions And SonarQube
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'be/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+    paths:
+      - 'be/**'
+
+jobs:
+  build-and-analyze:
+    name: Build and analyze code
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./be
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis, SonarQube 분석을 위한 전체 커밋 내역 필요
+
+      - name: Set up JDK 21 & Cache Gradle Dependencies
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'zulu' # Alternative distribution options are available
+          cache: gradle  # Gradle 캐시 적용
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Grant Execute Permission for Gradle
+        run: chmod +x gradlew
+
+      - name: Generate application properties
+        run: echo "${{ secrets.APPLICATION_JWT }}" > ./src/main/resources/application-jwt.yml
+
+      - name: Build project
+        run: ./gradlew build --info --stacktrace
+
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info --stacktrace
+
+  test:
+    name: Unit & Integration Tests with Coverage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./be
+    needs: build-and-analyze # 빌드 성공 후 실행
+
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 1234
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Wait for PostgreSQL to be Ready
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 1
+          done
+
+      - name: Run Tests & Generate Coverage Report
+        run: ./gradlew test jacocoTestReport
+
+      - name: Upload Coverage Report to SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar --info --stacktrace
