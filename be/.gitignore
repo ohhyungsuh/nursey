@@ -37,6 +37,5 @@ out/
 .vscode/
 
 .env
-.idea
-
+test/
 application-jwt.yml

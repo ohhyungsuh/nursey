@@ -1,3 +1,19 @@
 spring:
   application:
     name: be
+
+  profiles:
+    include: jwt, local
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+logging.level:
+  org.hibernate.SQL: debug
+
+#  # security logging
+#  org.springframework.security: DEBUG
