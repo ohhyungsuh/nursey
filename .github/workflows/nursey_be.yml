@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - main
+      - develop
     paths:
       - 'be/**'
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
       - main
+      - develop
     paths:
       - 'be/**'
 
