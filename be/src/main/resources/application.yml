@@ -3,7 +3,7 @@ spring:
     name: be
 
   profiles:
-    include: jwt, local
+    active: jwt, local
 
 logging:
   level:
