@@ -53,6 +53,8 @@ jobs:
         run: cat ./src/main/resources/application-jwt.yml
 
       - name: Build project
+        env:
+          SPRING_PROFILES_ACTIVE: local
         run: ./gradlew build --info
 
       - name: Build and analyze
@@ -77,7 +79,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 1234
-          POSTGRES_DB: test_db
+          POSTGRES_DB: nursey
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
