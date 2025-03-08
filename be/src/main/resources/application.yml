@@ -3,7 +3,21 @@ spring:
     name: be
 
   profiles:
-    active: jwt, local
+    include: jwt, local
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DATABASE}
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        format_sql: true
 
 logging:
   level:
@@ -12,3 +26,9 @@ logging:
 
   #  # security logging
   #  org.springframework.security: DEBUG
+
+jwt:
+  expiration:
+    access: ${ACCESS_EXPIRATION}
+    refresh: ${REFRESH_EXPIRATION}
+  secret: ${JWT_SECRET}
