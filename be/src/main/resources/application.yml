@@ -5,8 +5,30 @@ spring:
   profiles:
     include: jwt, local
 
-logging.level:
-  org.hibernate.SQL: debug
+  datasource:
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DATABASE}
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
-#  # security logging
-#  org.springframework.security: DEBUG
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql: trace
+
+  #  # security logging
+  #  org.springframework.security: DEBUG
+
+jwt:
+  expiration:
+    access: ${ACCESS_EXPIRATION}
+    refresh: ${REFRESH_EXPIRATION}
+  secret: ${JWT_SECRET}

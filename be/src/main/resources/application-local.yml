@@ -1,13 +1,5 @@
-spring:
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/nursey
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
+POSTGRESQL_USERNAME: postgres
+POSTGRESQL_PASSWORD: 1234
+POSTGRESQL_HOST: localhost
+POSTGRESQL_PORT: 5432
+POSTGRESQL_DATABASE: nursey
