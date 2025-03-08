@@ -128,4 +128,4 @@ jobs:
       - name: Upload Coverage Report to SonarQube
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonar --info --stacktrace
+        run: ./gradlew sonar -Dsonar.branch.name=develop --info --stacktrace
