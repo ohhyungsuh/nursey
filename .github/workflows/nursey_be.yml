@@ -23,6 +23,21 @@ jobs:
       run:
         working-directory: ./be
 
+    services:
+      postgres:
+        image: postgres:17
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 1234
+          POSTGRES_DB: nursey
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -55,8 +70,12 @@ jobs:
       - name: Generate application properties
         run: echo "${{ secrets.APPLICATION_JWT }}" > ./src/main/resources/application-jwt.yml
 
-      - name: Debug application-jwt.yml
-        run: cat ./src/main/resources/application-jwt.yml
+      - name: Wait for PostgreSQL to be Ready
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 1
+          done
 
       - name: Build project
         run: ./gradlew build
