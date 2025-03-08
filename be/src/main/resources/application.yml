@@ -5,8 +5,10 @@ spring:
   profiles:
     include: jwt, local
 
-logging.level:
-  org.hibernate.SQL: debug
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql: trace
 
-#  # security logging
-#  org.springframework.security: DEBUG
+  #  # security logging
+  #  org.springframework.security: DEBUG
