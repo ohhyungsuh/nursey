@@ -39,3 +39,4 @@ out/
 .env
 test/
 application-jwt.yml
+application-email.yml

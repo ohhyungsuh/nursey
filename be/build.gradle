@@ -86,6 +86,7 @@ dependencies {
     implementation 'org.modelmapper:modelmapper:3.1.1'
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-mail' // 이메일 인증 위한 의존성 추가
 }
 
 tasks.named('test') {
