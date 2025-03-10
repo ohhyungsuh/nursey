@@ -68,7 +68,9 @@ jobs:
         run: chmod +x gradlew
 
       - name: Generate application properties
-        run: echo "${{ secrets.APPLICATION_JWT }}" > ./src/main/resources/application-jwt.yml
+        run: |
+          echo "${{ secrets.APPLICATION_JWT }}" > ./src/main/resources/application-jwt.yml
+          echo "${{ secrets.APPLICATION_EMAIL }}" > ./src/main/resources/application-email.yml
 
       - name: Wait for PostgreSQL to be Ready
         run: |
