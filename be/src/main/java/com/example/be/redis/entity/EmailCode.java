@@ -4,6 +4,7 @@ import jakarta.persistence.Transient;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
 @Getter
 @RedisHash(value = "emailCode")
@@ -14,7 +15,7 @@ public class EmailCode {
 
     private String code;
 
-    @Transient
+    @TimeToLive
     private Long ttl;
 
     public EmailCode(String email, String code, Long ttl) {
