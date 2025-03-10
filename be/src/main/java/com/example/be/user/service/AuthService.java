@@ -2,6 +2,8 @@ package com.example.be.user.service;
 
 import com.example.be.user.exception.AuthException;
 import com.example.be.user.exception.UserErrorCode;
+import com.example.be.user.exception.UserException;
+import com.example.be.user.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.Random;
 public class AuthService {
 
     private final JavaMailSender mailSender;
+    private final UserRepository userRepository;
 
     private String generateEmailCode() {
         Random random = new Random();
@@ -27,6 +30,10 @@ public class AuthService {
     }
 
     public String sendVerificationEmail(String email) throws MessagingException {
+        if (userRepository.existsByEmail(email)) {
+            throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
+        }
+
         try {
             String code = generateEmailCode();
             MimeMessage message = mailSender.createMimeMessage();
@@ -34,9 +41,9 @@ public class AuthService {
 
             helper.setFrom("noreply@nursey.com", "Nursey");
             helper.setTo(email);
-            helper.setSubject("[서비스 이름] 이메일 인증 코드 안내");
+            helper.setSubject("[Nursey] 이메일 인증 코드 안내");
             helper.setText(
-                    "<h2>[서비스 이름] 이메일 인증 코드</h2>" +
+                    "<h2>[Nursey] 이메일 인증 코드</h2>" +
                             "<p>안녕하세요,</p>" +
                             "<p>요청하신 인증 코드는 다음과 같습니다:</p>" +
                             "<h3 style='color:blue;'>" + code + "</h3>" +
