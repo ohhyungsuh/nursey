@@ -30,7 +30,10 @@ public enum UserErrorCode implements ErrorCode {
     // 409 CONFLICT: 중복된 정보
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "이미 가입된 아이디입니다."),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 가입된 이메일입니다."),
-    DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다.");
+    DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다."),
+
+    // 503
+    EMAIL_SEND_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "이메일 전송에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
