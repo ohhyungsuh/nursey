@@ -1,5 +1,7 @@
 package com.example.be.user.service;
 
+import com.example.be.redis.service.EmailCodeService;
+import com.example.be.user.dto.request.EmailVerifyRequest;
 import com.example.be.user.exception.AuthException;
 import com.example.be.user.exception.UserErrorCode;
 import com.example.be.user.exception.UserException;
@@ -22,6 +24,7 @@ public class AuthService {
 
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
+    private final EmailCodeService emailCodeService;
 
     private String generateEmailCode() {
         Random random = new Random();
@@ -29,7 +32,7 @@ public class AuthService {
         return String.valueOf(code);
     }
 
-    public String sendVerificationEmail(String email) throws MessagingException {
+    public void sendEmailCode(String email) throws MessagingException {
         if (userRepository.existsByEmail(email)) {
             throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
         }
@@ -53,7 +56,8 @@ public class AuthService {
             );
 
             mailSender.send(message);
-            return code;
+
+            emailCodeService.saveEmailCode(email, code);
 
         } catch (MessagingException | UnsupportedEncodingException e) {
             log.error("이메일 전송에 실패했습니다. {}", e.getMessage());
@@ -61,4 +65,7 @@ public class AuthService {
         }
     }
 
+    public void verifyEmailCode(EmailVerifyRequest verifyRequest) {
+        emailCodeService.verifyEmailCode(verifyRequest);
+    }
 }
