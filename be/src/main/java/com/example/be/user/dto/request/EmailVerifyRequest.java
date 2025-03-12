@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class EmailConfirmRequest {
+public class EmailVerifyRequest {
 
     @Email(message = "올바른 이메일을 입력해주세요.")
     private String email;
