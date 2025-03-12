@@ -8,11 +8,12 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 @Getter
-public class BaseResponse<T> {
+public class ApiResponse<T> {
 
     private final Status status;
 
@@ -23,35 +24,30 @@ public class BaseResponse<T> {
     private Object result;
 
     // 응답 코드만 반환
-    public BaseResponse(HttpStatus httpStatus) {
+    public ApiResponse(HttpStatus httpStatus) {
         this.status = new Status(httpStatus);
     }
 
     // 단일 데이터 반환
-    public BaseResponse(HttpStatus httpStatus, T result) {
+    public ApiResponse(HttpStatus httpStatus, T result) {
         this.status = new Status(httpStatus);
-        this.metadata = new Metadata(1);
         this.result = result;
     }
 
     // 다중 데이터 반환
-    public BaseResponse(HttpStatus httpStatus, List<T> result) {
+    public ApiResponse(HttpStatus httpStatus, List<T> result) {
         this.status = new Status(httpStatus);
         this.metadata = new Metadata(result.size());
         this.result = result;
     }
 
     // 커스텀 에러 처리
-    public BaseResponse(CustomException e) {
+    public ApiResponse(CustomException e) {
         this.status = new Status(e.getErrorCode());
     }
 
-    public int getCode() {
-        return this.status.code;
-    }
-
     @Getter
-    private static class Status {
+    static class Status {
         private final int code;
         private final String message;
 
@@ -66,6 +62,7 @@ public class BaseResponse<T> {
             this.code = httpStatus.value();
             this.message = httpStatus.getReasonPhrase();
         }
+
     }
 
     @Getter
@@ -73,4 +70,5 @@ public class BaseResponse<T> {
     private static class Metadata {
         private int resultCount = 0;
     }
+
 }
