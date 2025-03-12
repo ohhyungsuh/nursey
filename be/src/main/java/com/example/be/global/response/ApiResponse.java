@@ -1,4 +1,4 @@
-package com.example.be.global.vo;
+package com.example.be.global.response;
 
 import com.example.be.global.exception.CustomException;
 import com.example.be.global.exception.ErrorCode;
@@ -44,6 +44,10 @@ public class BaseResponse<T> {
     // 커스텀 에러 처리
     public BaseResponse(CustomException e) {
         this.status = new Status(e.getErrorCode());
+    }
+
+    public int getCode() {
+        return this.status.code;
     }
 
     @Getter

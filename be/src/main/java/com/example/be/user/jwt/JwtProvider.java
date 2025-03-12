@@ -86,7 +86,6 @@ public class JwtProvider {
         } catch (ExpiredJwtException e) {
             log.info("Expired token", e);
             return false;
-//            throw new AuthException(UserErrorCode.EXPIRED_TOKEN);
         }
     }
 
