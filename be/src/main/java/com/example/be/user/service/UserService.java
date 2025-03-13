@@ -43,6 +43,10 @@ public class UserService {
             throw new UserException(UserErrorCode.MISMATCH_PASSWORD);
         }
 
+        if(userRepository.existsByEmail(signupRequest.getEmail())) {
+            throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
+        }
+
         if (userRepository.existsByNickname(signupRequest.getNickname())) {
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
