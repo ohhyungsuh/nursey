@@ -77,15 +77,18 @@ public class JwtProvider {
                     .build()
                     .parseSignedClaims(token);
             return true;
+        } catch (ExpiredJwtException e) {
+            log.info("Expired token", e);
+            return false;
         } catch (SecurityException e) {
             log.error("Invalid token signature", e);
             throw new AuthException(UserErrorCode.INVALID_TOKEN_SIGNATURE);
         } catch (MalformedJwtException | UnsupportedJwtException e) {
             log.error("Invalid token format", e);
             throw new AuthException(UserErrorCode.INVALID_TOKEN);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired token", e);
-            return false;
+        } catch (Exception e) {
+            log.info("그 외 jwt 관련 에러", e);
+            throw new AuthException(UserErrorCode.INVALID_TOKEN);
         }
     }
 

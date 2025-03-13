@@ -38,7 +38,7 @@ public class SecurityConfig {
 
     private final String[] whitelist = {
             "/", "/signup", "/login",
-            "/swagger-ui/**", "/v3/api-docs/**",
+            "/swagger-ui/**", "/v3/api-docs*/**",
             "/css/**", "/error"
     };
 
