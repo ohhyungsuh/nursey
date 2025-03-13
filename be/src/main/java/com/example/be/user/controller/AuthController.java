@@ -26,8 +26,8 @@ public class AuthController {
 
     @PostMapping("/email/verify")
     @Operation(summary = "이메일 인증 코드 발송", description = "이메일로 인증 코드를 발송합니다.")
-    public ApiResponse<String> sendEmailCode(@Valid @RequestBody EmailCodeRequest emailRequest) throws MessagingException {
-        authService.sendEmailCode(emailRequest.getEmail());
+    public ApiResponse<String> sendEmailCode(@Valid @RequestBody EmailCodeRequest codeRequest) throws MessagingException {
+        authService.sendEmailCode(codeRequest.getEmail());
 
         return new ApiResponse<>(OK, "인증 코드가 발송되었습니다.");
     }
