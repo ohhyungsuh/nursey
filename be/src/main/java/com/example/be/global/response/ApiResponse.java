@@ -46,6 +46,11 @@ public class ApiResponse<T> {
         this.status = new Status(e.getErrorCode());
     }
 
+    // @Valid 에러 처리
+    public ApiResponse(int code, String message) {
+        this.status = new Status(code, message);
+    }
+
     @Getter
     static class Status {
         private final int code;
@@ -61,6 +66,12 @@ public class ApiResponse<T> {
         public Status(HttpStatus httpStatus) {
             this.code = httpStatus.value();
             this.message = httpStatus.getReasonPhrase();
+        }
+
+        // @Valid 에러 코드 처리
+        public Status(int code, String message) {
+            this.code = code;
+            this.message = message;
         }
 
     }
