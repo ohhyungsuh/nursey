@@ -1,5 +1,6 @@
 package com.example.be.user.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -19,6 +20,7 @@ public class LoginRequest {
             regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^])[a-zA-Z\\d!@#$%^]+$",
             message = "비밀번호는 영어, 숫자, 특수문자(!@#$%^)를 포함해야 합니다."
     )
+    @Schema(example = "string")
     private String password;
 
 }

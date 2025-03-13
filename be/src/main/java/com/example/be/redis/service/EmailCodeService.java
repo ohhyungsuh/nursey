@@ -24,7 +24,6 @@ public class EmailCodeService {
     // 인증 코드 생성 및 저장
     public void saveEmailCode(String email, String code) {
         EmailCode emailCode = new EmailCode(email, code, expirationMillis / 1000);
-        log.info("email, code: {}, {}", emailCode.getEmail(), emailCode.getCode());
 
         emailCodeRepository.save(emailCode);
     }

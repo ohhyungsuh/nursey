@@ -38,6 +38,7 @@ public class SecurityConfig {
 
     private final String[] whitelist = {
             "/", "/signup", "/login",
+            "/swagger-ui/**", "/v3/api-docs*/**",
             "/css/**", "/error"
     };
 
@@ -54,8 +55,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/users/signup",
                                 "/api/v1/users/login",
-                                "/auth/email/verify",
-                                "/auth/email/confirm"
+                                "/api/v1/auth/email/verify",
+                                "/api/v1/auth/email/confirm"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 실행

@@ -1,6 +1,6 @@
 package com.example.be.user.auth;
 
-import com.example.be.global.vo.BaseResponse;
+import com.example.be.global.response.ApiResponse;
 import com.example.be.user.domain.User;
 import com.example.be.user.dto.PrincipalUserDetails;
 import com.example.be.user.dto.request.LoginRequest;
@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Slf4j
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -46,7 +48,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
             return getAuthenticationManager().authenticate(authenticationToken);
 
         } catch (IOException e) {
-            log.error("attemptAuthentication 에러: {}", e.getMessage());
+            log.error("ObjectMapper IO 에러: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -60,9 +62,9 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         LoginResponse loginResponse = new LoginResponse(user.getUserIdAsString(), user.getEmail(), user.getImageUrl());
 
-        BaseResponse<LoginResponse> baseResponse = new BaseResponse<>(OK, loginResponse);
+        ApiResponse<LoginResponse> baseResponse = new ApiResponse<>(OK, loginResponse);
 
-        // ResponseEntity로 반환
+        // ResponseEntity 반환
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
 
@@ -73,7 +75,13 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("로그인 실패");
+        ApiResponse<?> apiResponse = new ApiResponse<>(UNAUTHORIZED.value(), "이메일 또는 비밀번호가 일치하지 않습니다.");
+
+        // 응답 설정
+        response.setStatus(UNAUTHORIZED.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+
+        response.getWriter().write(new ObjectMapper().writeValueAsString(apiResponse));
     }
 }

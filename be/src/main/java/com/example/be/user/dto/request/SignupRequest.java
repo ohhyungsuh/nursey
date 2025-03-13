@@ -1,6 +1,7 @@
 package com.example.be.user.dto.request;
 
 import com.example.be.user.domain.Gender;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -18,6 +19,7 @@ public class SignupRequest {
             regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^])[a-zA-Z\\d!@#$%^]+$",
             message = "비밀번호는 영어, 숫자, 특수문자(!@#$%^)를 포함해야 합니다."
     )
+    @Schema(example = "string")
     private String password;
 
     @NotBlank
@@ -29,8 +31,10 @@ public class SignupRequest {
             regexp = "^[가-힣a-zA-Z0-9]+$",
             message = "닉네임은 한글, 영문, 숫자만 사용할 수 있습니다."
     )
+    @Schema(example = "string")
     private String nickname;
 
     @NotNull
+    @Schema(example = "string")
     private Gender gender;
 }
