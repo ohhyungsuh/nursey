@@ -1,6 +1,6 @@
 package com.example.be.global.config;
 
-import com.example.be.user.auth.CustomLoginFilter;
+import com.example.be.user.filter.CustomLoginFilter;
 import com.example.be.user.jwt.JwtExceptionFilter;
 import com.example.be.user.jwt.JwtFilter;
 import com.example.be.user.jwt.JwtProvider;
@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -1,4 +1,4 @@
-package com.example.be.user.auth;
+package com.example.be.user.filter;
 
 import com.example.be.global.response.ApiResponse;
 import com.example.be.user.domain.User;
